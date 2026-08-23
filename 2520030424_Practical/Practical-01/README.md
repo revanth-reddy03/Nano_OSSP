@@ -1,6 +1,5 @@
 PRACTICAL 1
-Roll Number: 2520030182
-Name: P. Venkata Sri Sai Madhurima
+
 
 1. C Program: Linux Command Execution
 Develop a C program that demonstrates how a Linux operating system executes a command entered by a user.
