@@ -1,61 +1,37 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
 
-#define MAX_INPUT 100
-
 int main() {
-    char input[MAX_INPUT];
-    char *args[MAX_INPUT / 2 + 1];
+    char command[100];
+    char *args[20];
     int i = 0;
 
-    printf("Enter a Linux command: ");
-    fgets(input, sizeof(input), stdin);
+    printf("Enter command: ");
+    fgets(command, sizeof(command), stdin);
 
-    // Remove newline character
-    input[strcspn(input, "\n")] = '\0';
+    command[strcspn(command, "\n")] = 0;
 
-    // Split command into arguments
-    char *token = strtok(input, " ");
+    args[0] = strtok(command, " ");
 
-    while (token != NULL && i < MAX_INPUT / 2) {
-        args[i++] = token;
-        token = strtok(NULL, " ");
+    while (args[i] != NULL) {
+        i++;
+        args[i] = strtok(NULL, " ");
     }
 
-    args[i] = NULL;
-
-    printf("\nParent Process PID: %d\n", getpid());
-
-    pid_t pid = fork();
-
-    if (pid < 0) {
-        perror("fork failed");
-        return 1;
-    }
+    int pid = fork();
 
     if (pid == 0) {
-        // Child process
-        printf("Child Process PID: %d\n", getpid());
-        printf("Executing command...\n");
-
+        printf("Child PID: %d\n", getpid());
         execvp(args[0], args);
-
-        // This executes only if execvp fails
-        perror("execvp failed");
-        exit(1);
     }
     else {
-        // Parent process
-        printf("Parent waiting for child process...\n");
+        printf("Parent PID: %d\n", getpid());
+        printf("Child PID: %d\n", pid);
 
         wait(NULL);
-
-        printf("Child process %d completed.\n", pid);
-        printf("Parent process %d completed.\n", getpid());
+        printf("Child process completed.\n");
     }
 
     return 0;
