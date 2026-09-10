@@ -1,38 +1,18 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <string.h>
 
 int main() {
-    char command[100];
-    char *args[20];
-    int i = 0;
+    char cmd[20];
 
     printf("Enter command: ");
-    fgets(command, sizeof(command), stdin);
+    scanf("%s", cmd);
 
-    command[strcspn(command, "\n")] = 0;
-
-    args[0] = strtok(command, " ");
-
-    while (args[i] != NULL) {
-        i++;
-        args[i] = strtok(NULL, " ");
-    }
-
-    int pid = fork();
-
-    if (pid == 0) {
-        printf("Child PID: %d\n", getpid());
-        execvp(args[0], args);
-    }
-    else {
-        printf("Parent PID: %d\n", getpid());
-        printf("Child PID: %d\n", pid);
-
+    if (fork() == 0) {
+        printf("Child PID = %d\n", getpid());
+        execlp(cmd, cmd, NULL);
+    } else {
+        printf("Parent PID = %d\n", getpid());
         wait(NULL);
-        printf("Child process completed.\n");
     }
-
-    return 0;
 }
