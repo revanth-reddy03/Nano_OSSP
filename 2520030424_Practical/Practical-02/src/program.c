@@ -2,19 +2,27 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-int main() {
-    int f1, f2;
-    char data[100];
-    int n;
+int main()
+{
+    int fd1, fd2;
+    char buff[100];
+    size_t n;
 
-    f1 = open("file1.txt", O_RDONLY);
-    f2 = open("file2.txt", O_WRONLY | O_CREAT, 0644);
+    fd1 = open("sourcefile", O_RDONLY);
 
-    n = read(f1, data, 100);
-    write(f2, data, n);
+    fd2 = open("destinationfile", O_WRONLY | O_CREAT, 0644);
 
-    close(f1);
-    close(f2);
+    printf("Source file descriptor: %d\n", fd1);
+    printf("Destination file descriptor: %d\n", fd2);
 
-    printf("File copied successfully");
+    n = read(fd1, buff, 100);
+
+    write(fd2, buff, n);
+
+    close(fd1);
+    close(fd2);
+
+    printf("File copied successfully..\n");
+
+    return 0;
 }
