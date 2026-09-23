@@ -1,10 +1,46 @@
-# Practical 3: Zombie Processes in C
+# Practical-03: Parent and Child Process Using fork()
 
-## Objective
-The goal of this practical is to investigate operating system process states by intentionally creating a zombie process (a terminated child whose parent has not yet read its exit status) and then learning how to properly eliminate it using process synchronization (wait).
+## Aim
 
-## Project Structure
-* src/Program.c - Source code implementing the zombie process creation.
-* outputs/Command.txt - Text file containing the terminal output and process status logs.
-* Output.png - Screenshot showing the zombie process in the process table (ps aux).
-* ReadMe.md - Documentation for the practical.
+To develop a C program using `fork()` to create a parent and child process and display their Process ID (PID), Parent Process ID (PPID), and process states.
+
+## Description
+
+The `fork()` system call is used to create a new child process from the parent process.
+
+After `fork()`:
+
+- The **parent process** continues its execution.
+- The **child process** gets a separate PID.
+- `getpid()` is used to display the PID of the current process.
+- `getppid()` is used to display the PPID of the current process.
+
+The process state can be observed using Linux commands such as `ps`.
+
+## System Calls / Functions Used
+
+| Function | Purpose |
+|---|---|
+| `fork()` | Creates a child process |
+| `getpid()` | Returns the PID of the current process |
+| `getppid()` | Returns the PPID of the current process |
+
+## Program Flow
+
+```text
+             fork()
+               ↓
+        ┌──────┴──────┐
+        ↓             ↓
+     Parent          Child
+        ↓             ↓
+    getpid()       getpid()
+    getppid()      getppid()
+        ↓             ↓
+     Running       Running
+
+## Compilation
+gcc practical3.c
+
+##output
+./a.out
